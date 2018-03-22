@@ -1,0 +1,13 @@
+\beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {1}{个人基本信息}{3}{0}{1}
+\beamer@sectionintoc {2}{选题背景}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{基本理论背景}{5}{0}{2}
+\beamer@subsectionintoc {2}{2}{Motivation}{10}{0}{2}
+\beamer@sectionintoc {3}{论文主要研究方向}{11}{0}{3}
+\beamer@subsectionintoc {3}{1}{$\mathcal {H}_{\infty }$ finite-time bounded controller design}{13}{0}{3}
+\beamer@subsectionintoc {3}{2}{$\mathcal {H}_{\infty }$ finite-time bounded Luenberger observer design}{25}{0}{3}
+\beamer@subsectionintoc {3}{3}{$\mathcal {H}_{\infty }$ finite-time bounded functional observer design}{29}{0}{3}
+\beamer@subsectionintoc {3}{4}{High-gain observer design for Holder nonlinearity}{38}{0}{3}
+\beamer@sectionintoc {4}{总结}{41}{0}{4}
+\beamer@subsectionintoc {4}{1}{创新性}{41}{0}{4}
+\beamer@subsectionintoc {4}{2}{小结}{43}{0}{4}

@@ -1,0 +1,600 @@
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%  pdflatex编译                                                                          %%%
+%%%  更新的具体方法可参考: http://bbs.ctex.org/forums/index.php?showtopic=27695            %%%
+%%%  Maintainers: 黄正华 (huangzh@whu.edu.cn)  2006-5-25                                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[mathserif,envcountsect,compress]{beamer}
+\usepackage{mathrsfs}
+%\usepackage{cctbase,ccmap,everb}               % CCT 的相关宏包, 使支持中文, 等等.
+%\usepackage[normalem]{CCTfntef}                % 2005-11-18 向作者报告 bug 后, 修改.
+\usepackage{ctex}
+\usepackage{hyperref}
+\hypersetup{CJKbookmarks=true}
+\usetheme{Warsaw}%\usecolortheme{albatross}
+% \setbeamercolor{background canvas}{bg=magenta} % 背景颜色可调.
+\usepackage{amsfonts}
+\usepackage{color,xcolor}
+\usepackage{pgf,tikz}
+\usepackage{graphicx}
+%\usepackage{picins}
+\usepackage{subfigure}
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{makecell}
+\usepackage{multirow}                     % 图片嵌入段落宏包 比如照片
+\setbeamertemplate{theorems}[numbered]
+\theoremstyle{plain}% default
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{KL}{Klein’s Lemma}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{exmp}{Example}[section]
+\newtheorem{xca}[exmp]{Exercise}
+\newtheorem{assp}{Assumption}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\newtheorem{case}{Case}
+
+\setbeamertemplate{navigation symbols}{}
+%------------------------------------------------------
+\usepackage{bbding}% 手势 \HandRight \HandLeft %\FiveStar \FourStar \SixStar
+\newcommand{\handr}{\textcolor{magenta}{\HandRight}} % 自定义\handr
+
+
+%===================== 重定义字体、字号命令 =============================%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\song}{\CJKfamily{song}}    % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\CJKfamily{hei}}      % 黑体   (Windows自带simhei.ttf)
+\newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+\newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+%
+\newcommand{\teda}{\fontsize{120pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\dachuhao}{\fontsize{60pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 字号设置
+\newcommand{\yichu}{\fontsize{30pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoyihao}{\fontsize{24pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+
+
+%%==================================自定义=========================================%
+\newcommand{\jieda}{\noindent\textcolor{red}{\heiti 解:}\quad}
+\newcommand{\zheng}{\noindent\textcolor{red}{\heiti 证:}\quad}
+\newcommand{\yunhan}{\,{\color{red!70}\Rightarrow}\,}
+
+\makeatletter %自定义: 罗马数字
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\makeatother
+%==============自定义: 逐个 item 高亮(\hilite), 或"高黑"(\hidark)==================%
+\def\hilite<#1>{%
+\temporal<#1>{\color{blue!35}}{\color{magenta}}%
+{\color{blue!75}}}
+\def\hidark<#1>{%
+\temporal<#1>{\color{black!35}}{\color{magenta}}%
+{\color{black}}}
+%====================== metapost =================================================%
+\usepackage{xmpmulti}  %% metapost 动画
+\DeclareGraphicsRule{*}{mps}{*}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\AtBeginSection[]{
+   \frametitle{框架}\small
+   \tableofcontents[currentsection,currentsubsection,subsectionstyle=show/show/hide]
+               }\title[zhouchenglai718@gmai.com]{\textcolor[rgb]{1.00,1.00,1.00}{硕士论文开题报告 }}
+\author[浙江师范大学\ 2019 届硕士研究生\ 周诚来]{周诚来}
+\date{导师：蔡秀珊教授\\ 2017年12月11日}
+\institute{\kaishu\textcolor[rgb]{0.85,0.42,0.00} {
+浙江师范大学数理信息工程学院\\
+运筹学与控制论专业}}
+
+\frame{\titlepage}
+\begin{frame}\frametitle{目录}\small
+\tableofcontents
+\end{frame}
+
+\section{个人基本信息}
+
+\begin{frame}\frametitle{教育背景和学术交流经历}
+\begin{block}{教育背景}
+本科~~~2011.9 - 2015.6~~~太原师范学院~~~数学与应用数学专业(师范)\\
+
+硕士~~~2015.9 - 至今~~~浙江师范大学~~~运筹学与控制论专业 \\ \indent ~~~~~~~~~ 导师: 蔡秀珊教授\\
+%博士~~~2014.9 - 2017.6~~~浙江师范大学~~~运筹学与控制论专业\\ \indent ~~~~~~~~~导师: 王维凡教授
+\end{block}
+\medskip
+\begin{block}{学术交流经历}
+2016.7.2 - 2016.7.13~~~华东师范大学“多尺度”动力系统夏令营~~~学习交流
+\smallskip
+
+2016.7.27 - 2016.7.29~~~第35届中国控制会议~~~学术交流论文报告
+\end{block}
+\end{frame}
+%\begin{frame}{主要研究方向介绍}
+%\begin{block}{研究方向}
+%\noindent {\textcolor[rgb]{1.00,0.00,0.00}{非线性系统,
+%有限时间有界控制, 观测器设计}}
+%\end{block}
+%\medskip
+%\begin{block}{研究的主要内容}
+%\begin{itemize}
+%\item  $\mathcal{H}_{\infty}$ 有限时间有界控制器设计($\mathcal{H}_{\infty}$ finite-time bounded controller design)\\
+%\item  $\mathcal{H}_{\infty}$ 有限时间有界观测器设计($\mathcal{H}_{\infty}$ finite-time bounded observer design)\\
+%\end{itemize}
+%\end{block}
+%\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{选题背景}
+\subsection{基本理论背景}
+\begin{frame}\frametitle{选题背景}
+\textbf{理论起源:}\par
+有限时间控制概念最早来源于Dorato的短时间稳定性（short-time stability），处理线性时变系统的有限时间稳定问题（FTS）。同年1961年，Lsalle和Lefschetz提出了相似的概念称之为实用稳定性。与传统的渐近稳定性概念不同，一个系统是FTS，它可以不是渐近稳定的，只要在有限的时间内，系统的状态没有超过预先给定的界限，这些概念也被称为有限时间吸引，后来在1997年，Dorato等人在第36届IEEE CDC 会议上提出应用线性矩阵不等式（LMIs）来计算状态反馈控制器从而解决线性系统的鲁棒FTS的设计问题，基于LMIs的方法使得控制器的待解增益矩阵更易得到，而后在2001年，Amato在Weiss的有限时间有界输入有界输出（BIBO）概念的基础上，提出了另一种稳定性概念-有限时间有界（FTB）。
+\end{frame}
+\begin{frame}\frametitle{选题背景}
+\textbf{FTB与FTS的区别:}\par
+一个系统如果已知初始条件的界限，它的状态轨迹在指定的时间区间内仍在特定的界限内，注意这个界限是待解的，此时这个系统是FTS的。而FTB 概念则是通过给原系统引进外部扰动得到的，换句话说，在给定初始条件的界和容许输入的集合，称一个系统是FTB的，如果状态变量对所有集合中的输入任然小于给定的界限，注意此处的界限是已知的。所以FTB是FTS的延伸，即一个系统如果是FTB的那它一定是FTS的，反之并不成立。\par
+\end{frame}
+\begin{frame}\frametitle{选题背景}
+\textbf{FTB与FTS的区别:}\par
+\begin{figure} \centering
+\subfigure[The FTS concept of Dorato.] { \label{fig:1a}
+\includegraphics[width=0.42\columnwidth]{doratofiga.eps}
+}
+\subfigure[The FTB concept of Amato.] { \label{fig:1b}
+\includegraphics[width=0.47\columnwidth]{amatofigb.eps}
+}
+\caption{The difference between FTS of Dorato and FTB of Amato (The curve stands the value of $x^TRx$, where every dot of curves is the start point and the arrowhead is the end during time $T$). }
+\end{figure}
+\end{frame}
+\begin{frame}\frametitle{选题背景}
+\textbf{FTB理论发展现状调研:}\par
+此后，许多关于FTB的研究相继问世：存在范数有界干扰的线性连续系统的$\mathcal{H}_{\infty}$有限时间控制；线性时变连续系统的有界时间稳定；变时滞马尔科夫跳跃切换神经网络的有限时间有界，$\mathcal{L}_{2}$增益分析与控制；一类不确定切换神经网络系统的鲁棒有限时间$\mathcal{H}_{\infty}$控制；带范数有界干扰的切换非线性离散系统的$\mathcal{H}_{\infty}$有限时间有界控制；准单边Lipschitz系统的有限时间$\mathcal{H}_{\infty}$控制；脉冲系统的输入到输出有限时间稳定性的冲要条件等等。
+\end{frame}
+\subsection{Motivation}
+\begin{frame}\frametitle{选题背景}
+\textbf{Motivation:}\par
+有限时间有界概念更注重在实际应用上关注固定时间区间上系统的性能和状态轨道。例如期望在给定时间里完成一定的控制目标；又如在给定的时间和可允许的误差界限下完成一定的观测目的。因此有限时间有界概念在实际工程应用中更加广泛，例如确保航天器在给定时间内与特定的轨道上运行以完成一系列指令；在指定的时间区间内把火箭从A点发射到B点问题；在一个化学过程中指定时间内控制温度或压力保持在我们想要的界限之内等问题.\par
+
+另一方面，在实际生活与工程应用中，时滞现象普遍存在且不可避免。例如语音通信中的信号延时传递；给细胞注射药物后的延时反应。很多时候时滞现象常引起系统的不良状态甚至破坏系统的整体稳定性，因此我们希望对时滞系统设计相应控制器使之稳定，例：网络系统的马尔科夫时滞预测控制；离散模糊时滞系统的时滞相关稳定性判别与控制。
+\end{frame}
+
+
+\section{论文主要研究方向}
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+考虑如下系统:
+\begin{block}{System}
+\begin{align}
+	\Sigma_1:\left\{\begin{aligned}
+	\dot{x}(t) &= A_1x(t)+A_2x(t-\tau)+\Phi(x)+B_1u(t)+D_1\omega(t)\\
+	y(t) &= Cx(t)+D_2\omega(t)\\
+	x(t) &= \phi(t),\qquad t\in[-\tau,0]
+	\end{aligned}\right.
+\end{align}
+\end{block}
+$x(t)\in \mathcal {R}^n$, $u(t)\in \mathcal {R}^m$, $y(t)\in \mathcal {R}^p$, $\omega(t)\in \mathcal {R}^l$ 分别为系统状态，输入，输出和干扰. $\tau\in \mathcal {R}^{+}$
+ 是常时滞. $\phi(t) \in \mathcal {C}^1([-\tau,0],\mathcal {R}^n)$ 是系统连续的初始状态. $\Phi(\cdot)$: $\mathcal {R}^n\to \mathcal {R}^n$， $\Phi(0)=0$ 为非线性函数.\par
+\end{frame}
+
+\subsection{$\mathcal{H}_{\infty}$ finite-time bounded controller design}
+
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+无输入时, $\Sigma_1$ 形如开环系统 $\Sigma_2$。 构造状态反馈 $u(t)=Kx(t)$, $K\in\mathcal {R}^{m\times n}$ 为待定增益, $\Sigma_1$ 变为 $\Sigma_3$,
+\begin{block}{system 2}
+ \begin{align}
+ 	\Sigma_2:\left\{\begin{aligned}
+ 	\dot{x}(t) &= A_1x(t)+A_2x(t-\tau)+\Phi(x)+D_1\omega(t)\\
+ 	y(t) &= Cx(t)+D_2\omega(t)\\
+ 	x(t) &= \phi(t),\qquad t\in[-\tau,0]
+ 	\end{aligned}\right.
+ \end{align}
+\end{block}
+\begin{block}{system 3}
+  \begin{align}
+  \Sigma_3:\left\{\begin{aligned}
+  \dot{x}(t) &= \bar{A}_1x(t)+A_2x(t-\tau)+\Phi(x)+D_1\omega(t)\\
+  y(t) &= Cx(t)+D_2\omega(t)\\
+  x(t) &= \phi(t),\qquad t\in[-\tau,0]
+  \end{aligned}\right.
+  \end{align}
+ where $\bar{A}_1=A_1+B_1K$.
+\end{block}
+\end{frame}
+
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+在研究的技术路线上，首先研究形如开环系统 $\Sigma_2$ 的FTB控制问题（即：假设开环系统是FTB的，探索需要什么条件）, 其次研究闭环系统 $\Sigma_3$ 的FTB条件, 最后给出目标系统 $\Sigma_1$ 的状态反馈设计方案. 以下是本课题需要的假设和相关概念.
+%[Quasi-one-sided Lipschitz condition\cite{Hu2008},\cite{Cai2012}]
+ \begin{assp}[单边Lipschitz条件 (Hu, 2006), (Hu, 2008)]
+给定范围 $\mathcal {D}$, 非线性函数 $\varphi(\cdot)$: $\mathcal {R}^n\to \mathcal {R}^n$， $\varphi(0)=0$ 是单边Lipschitz函数, 如果存在标量 $\rho$, 使得 $\forall x\in \mathcal {D}\cap\mathcal {R}^n$ 如下不等式成立:
+ 	\begin{align}
+ 		\langle \varphi(x),x \rangle\leq \rho\|x\|^2
+ 	\end{align}
+ \end{assp}
+ \noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao G. Hu, Observers for one-sided lipschitz nonlinear systems, Ima Journal of
+Mathematical Control \& Information 23 (4) (2008) 395–401.}\pause
+
+ \noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao G. Hu, A note on observer for one-sided lipschitz non-linear systems, Ima
+Journal of Mathematical Control \& Information 25 (3) (2006) 297–303.}\pause
+\end{frame}
+
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+单边Lipschitz条件首先由胡教授提出 [Hu, 2006]. 如果 $\varphi(\cdot)$ 是 Lipschitz 非线性， $\gamma$为相应的Lipschitz 常数, 即, $|\varphi(x)|\leq\gamma|x|$, 等价于
+\begin{align*}
+|\langle\varphi(x), x\rangle|\leq\gamma\|x\|^2
+\end{align*}
+
+ \noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao G. Hu, Observers for one-sided lipschitz nonlinear systems, Ima Journal of Mathematical Control \& Information 23 (4) (2006) 395–401.}\pause
+
+可见, $\gamma$ 在Lipschitz 范畴中必须为一正常数，然而在单边Lipschitz范畴中, 相应的常数$\rho$ 可正，可负可为零. 因此任何一个Lipschitz 函数都可视为单边Lipschitz 函数，反之则不然. 因此本课题考虑的非线性函数比通常的Lipschitz 非线性函数具有更小的保守性，相比之下应用背景更广泛也更加贴近实际工程应用背景. 以下举例说明本课题的非线性函数的应用广泛性.
+\end{frame}
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+\begin{exmp}
+非线性函数 $\varphi(x)=-x^3$ 只是局部Lipschitz不是全局Lipschitz. 然而, $\forall x_1$， $x_2$, 有
+\begin{align*}
+\langle \varphi(x_1)-\varphi(x_2),x_1-x_2\rangle=-(x_1-x_2)^2(x_1^2+x_1x_2+x_2^2)<0
+\end{align*}
+因此 $\varphi(x)=-x^3$ 为全局单边Lipschitz函数，单边Lipschitz 常数$\rho_1=0$.
+\end{exmp}
+\end{frame}
+
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+\begin{defn}[Finite-Time Bounded]
+非线性系统是有限时间有界 (FTB) 的对于 $(c_1,c_2,T,\alpha(\cdot),d)$， 如果存在正常数 $c_1$, $c_2$, $T>0$， $0< c_1<c_2$ 和函数 $\alpha(\cdot)\in \mathcal {K}_{\infty}$, 当 $t_0=0$ 时满足:
+ \begin{align}
+	 \alpha\left( \lVert x(0)\rVert\right)\leq c_1 \Rightarrow \alpha\left( \lVert x(t)\rVert\right)<c_2,\qquad \forall t\in[0,T]
+ \end{align}
+\end{defn}
+\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao  F. Amato, M. Ariola, P. Dorato, Finite-time control of linear systems subject to parametric uncertainties and disturbances, Automatica 37 (9) (2001) 1459–1463.}\pause
+
+\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao  F. Amato, M. Ariola, C. T. Abdallah, P. Dorato, Finite-time control for uncertain linear systems with disturbance inputs 3 (1999) 1776–1780..}\pause
+\end{frame}
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+\begin{defn}[时滞系统的FTB]
+$\Sigma_2$ subject to $A_1$ and $A_2$ is said to be FTB with respect to $(c_1,c_2,T,R,d)$ where $0<c_1<c_2$, $R\in \mathcal {R}^{n\times n}$, $R>0$,
+  	if the following condition holds:
+  	\begin{align}
+  		\sup_{-\tau\leq t\leq0}\phi^T(t)R\phi(t)\leq c_1\Rightarrow x^T(t)Rx(t)<c_2,\qquad \forall t\in[0,T]
+  	\end{align}
+\end{defn}
+\end{frame}
+
+\begin{frame}\frametitle{(1) $\mathcal{H}_{\infty}$ finite-time bounded controller design}
+\textbf{Main Problem:}\par
+  	本课题所考虑的系统 $\Sigma_1$ 带状态反馈 $u(t)=Kx(t)$ 的有限时间$\mathcal {H}_{\infty}$有界控制问题，是可解决的，则需满足如下条件:
+  	\begin{enumerate}[(1)]
+  		\item 闭环系统 $\Sigma_3$ 是 FTB.
+  		\item 在零初态 $\phi (t)=0,\ \forall t\in[-\tau, 0]$, 输出 $y(t)$ 满足以下干扰抑制条件
+  		\begin{align}
+  			\int^t_0y^T(s)y(s)\,\mathrm{d}s \leq\gamma^2\int_{0}^{t}\omega^T(s)\omega(s)\,\mathrm{d}s
+  		\end{align}
+对于任何 $\omega(t)\in \mathcal{W}$, 干扰抑制参数 $\gamma>0$.
+  	\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\begin{frame}\frametitle{(2) $\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+%%\medskip
+%%\noindent The entire coloring of a plane graph was introduced by Ringel(1965).\\
+%%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao G.Ringel, Ein Sechfarbenproblem auf der Kugel, Abh. Math. Sem. Univ. Hamburg 29(1965), 107-117.}\pause
+%%\medskip
+%%\begin{block}{Conjecture (Kronk and Mitchem, 1973)}
+%%\medskip
+%%For any plane graph $G$, $\chi_{vef}(G)\leq\Delta+4$.
+%%\end{block}\pause
+%%\begin{block}{Theorem 2.1 (Kronk and Mitchem, 1973)}
+%%\medskip
+%%For any plane graph $G$ with $\Delta\leq3$, $\chi_{vef}(G)\leq\Delta+4$.
+%%\end{block}
+%%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao H.Kronk, J.Mitchem, Discrete Math. 5(1973), 253-260.}
+%%\end{frame}
+
+\subsection{$\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+
+\begin{frame}\frametitle{(2) $\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+考虑如下非线性系统:
+\begin{block}{system}
+\begin{align}
+	\Sigma:\left\{\begin{aligned}
+	\dot{x}(t) &= A_1x(t)+A_2x(t-\tau)+\Phi(x,u(t))+D\omega(t)\\
+	y(t) &= Cx(t)\\
+	x(t) &= \phi(t),\qquad t\in[-\tau,0]
+	\end{aligned}\right.
+\end{align}
+\end{block}
+
+
+$x(t)\in \mathcal {R}^n$, $u(t)\in \mathcal {R}^m$, $y(t)\in \mathcal {R}^p$, $\omega(t)\in \mathcal {R}^l$ 分别是系统状态，输入，输出和干扰。 $\tau\in \mathcal {R}^{+}$ 为常时滞. $\phi(t) \in \mathcal {C}^1([-\tau,0],\mathcal {R}^n)$ 为连续初始状态. $\Phi(\cdot,\cdot)$: $\mathcal {R}^n\times\mathcal {R}^m\to \mathcal {R}^n$ with $\Phi(0,0)=0$ 是非线性函数.\par
+
+假设 $(A,C)$ 可观测， $C$ 为行满秩矩阵. 非线性函数 $\Phi(\cdot,\cdot)$ 满足准单边 Lipschitz 条件. 以下给出所需的假设与相关定义。
+\end{frame}
+
+\begin{frame}\frametitle{(2) $\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+
+\begin{assp}[准单边 Lipschitz 条件(Hu, 2008),(Hu,2006)]
+ 	%For a given region $\mathcal {D}$,
+ 非线性函数 $\varphi(\cdot)$: $\mathcal {R}^n\to \mathcal {R}^n$， $\varphi(0)=0$ 为准单边 Lipschitz, 如果存在正定矩阵 $P$ satisfies $f(x)=P\varphi(x)$ 和对称矩阵 $\Lambda\in \mathcal {R}^{n\times n}$, 使得 $\forall x\in \mathcal {R}^n$ 满足:
+ 	\begin{align}
+ 		\langle f (x),x \rangle\leq x^T \Lambda x
+ 	\end{align}
+\end{assp}
+\begin{rem}
+准单边 Lipschitz 条件首先由胡教授基于如下单边Lipschitz条件提出:
+$\langle f (x),x \rangle\leq \upsilon\|x\|^2$.
+值得注意的是，当存在对称矩阵 $M\geq \upsilon I$, 准单边 Lipschitz 条件比单边Lipschitz条件具有更小的保守性. 特别地, 当 $M=\upsilon I$, 准单边Lipschitz条件等价于单边Lipschitz.
+\end{rem}
+
+\end{frame}
+
+\begin{frame}\frametitle{(2) $\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+基于目标系统，考虑如下经典的类龙伯格观测器：
+\begin{align}
+\dot{\xi}(t)=A_1\xi(t)+A_2\xi(t-\tau)+\Phi(\xi,u)+L(y(t)-C\xi(t))
+\end{align}
+设误差 $e(t)=x(t)-\xi(t)$. 则误差系统
+\begin{align}
+\dot{e(t)}&=\dot{x(t)}-\dot{\xi(t)}\notag\\
+             &=A_1x(t)+A_2x(t-\tau)+\Phi(x,u)+Dw(t)\notag\\
+             &-A_1\xi(t)-A_2\xi(t-\tau)-\Phi(\xi,u)-L(Cx(t)-C\xi(t))\notag\\
+             &=(A_1-LC)e(t)+A_2e(t-\tau)+\Phi(x,u)-\Phi(\xi,u)+Dw(t)\notag
+\end{align}
+整理得到误差系统
+\begin{align}
+\dot{e}(t)=(A_1-LC)e(t)+A_2e(t-\tau)+\Delta\Phi+Dw(t)
+\end{align}
+where $\Delta\Phi=\Phi(x,u)-\Phi(\xi,u)$.
+\end{frame}
+\begin{frame}\frametitle{(2) $\mathcal{H}_{\infty}$ finite-time bounded Luenberger observer design}
+在这一部分的技术路线上，我们想要设计一个全维有限时间有界观测器（FTBO）针对于目标准单边Lipschitz非线性系统，基于FTB理论. 即：
+
+\textbf{Main Problem:}\par
+  	$\Sigma_1$的有限时间$\mathcal {H}_{\infty}$有界观测器设计，是可解的，需满足以下条件:
+  	\begin{enumerate}[(1)]
+  		\item 导出的误差系统需 FTB.
+  		\item 在零初态下 $\phi (t)=0,\ \forall t\in[-\tau, 0]$, 误差 $e(t)$ 需满足如下干扰有界条件
+  		\begin{align}
+  			\int^t_0e^T(s)e(s)\,\mathrm{d}s \leq\gamma^2\int_{0}^{t}\omega^T(s)\omega(s)\,\mathrm{d}s
+  		\end{align}
+对于所有 $\omega(t)\in \mathcal{W}$, 且干扰抑制参数 $\gamma>0$.
+  	\end{enumerate}
+\end{frame}
+
+
+
+\subsection{$\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+
+%\begin{frame}\frametitle{(3) finite-time bounded functional observer observer design}
+%\begin{block}{Theorem 2.2}
+%\medskip
+%$\chi_{vef}(G)\leq\Delta+4$ if $G$ is a plane graph with:
+%$\bullet$ $\Delta\geq12$$^{[1]}$
+%$\bullet$ $\Delta=9,10,11$$^{[2]}$
+%$\bullet$ $\Delta=7,8$$^{[3]}$
+%$\bullet$ $\Delta=6$$^{[4]}$
+%$\bullet$ $\Delta=4,5$$^{[5]}$
+%\end{block}
+%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao[1]} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao O.V.Borodin, Metody Diskret. Analiz. Novosibirsk(1987), 21-27(in Russian).}
+%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao[2]} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao O.V.Borodin, Metody Diskret. Analiz. Novosibirsk(1988), 27-37.}
+%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao[3]} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao O.V.Borodin, J. Graph Theory 23(1996), 233-239.}
+%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao[4]} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao D.Sanders, Y.Zhao, Canad. Math. Bull. 43(2001), 108-114.}
+%\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao[5]} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao W.Wang, X.Zhu, J. Combin. Theory Ser. B 101(2011), 490-501.}
+%\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+\begin{block}{目标系统}
+\begin{align}
+	\Sigma:\left\{\begin{aligned}
+	\dot{x}(t) &= Ax(t)+Bx(t-\tau)+\Phi(x,u(t))+D_1w(t)\\
+	y(t) &= Cx(t)+D_2w(t)\\
+	x(t) &= \phi(t),\qquad t\in[-\tau,0]
+	\end{aligned}\right.
+\end{align}
+\end{block}
+其中 $x(t)\in \mathcal {R}^n$, $u(t)\in \mathcal {R}^m$, $y(t)\in \mathcal {R}^p$, $w(t)\in \mathcal {R}^l$ 分别为系统的状态，输入，输出和干扰. $A$, $B\in\mathcal {R}^{n\times n}$, $D_1\in\mathcal {R}^{n\times l}$, $C\in\mathcal {R}^{p\times n}$, $D_2\in\mathcal {R}^{p\times l}$ 是已知实值矩阵. $\tau\in \mathcal {R}^{+}$ 为常时滞. $\phi(t) \in \mathcal {C}^1([-\tau,0],\mathcal {R}^n)$ 为连续初始状态. $\Phi(\cdot,\cdot)$: $\mathcal {R}^n\times\mathcal {R}^m\to \mathcal {R}^n$， $\Phi(0,0)=0$ 为非线性函数.\par
+此处假设 $(A,C)$ 可观测且 $C$ 为行满秩矩阵.
+\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+To begin with the main results, we give the following assumptions and definitions.
+\begin{assp}[二次内部有界条件(Zhang,2012)]
+ 	%For a given region $\mathcal {D}$,
+非线性函数 $\Phi(x,u)$: $\mathcal {R}^n\times\mathcal {R}^m\to \mathcal {R}^n$ with $\Phi(0,0)=0$ 是二次内部有界的, i.e., $\forall x_1, x_2\in \bar{D}$, 如果存在 $\beta$, $\gamma\in \mathcal {R}$, 使得:
+\begin{align}
+(\Phi(x_1,u)&-\Phi(x_2,u))^T(\Phi(x_1,u)-\Phi(x_2,u))\notag\\
+&\leq\beta\|x_1-x_2\|^2\notag\\
+&+\gamma\langle\Phi(x_1,u)-\Phi(x_2,u),x_1-x_2\rangle
+\end{align}
+
+\end{assp}
+\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao W. Zhang, H. Su, H. Wang, Z. Han, Full-order and reduced-order observers for one-sided lipschitz nonlinear systems using riccati equations, Communi- 27270 cations in Nonlinear Science \& Numerical Simulation 17 (12) (2012) 4968– 4977.}
+
+\end{frame}
+
+
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+\begin{rem}
+容易看到，Lipschitz 连续包含于二次内部有界条件，反之则不然(Abbaszadeh,2010). 并且注意 $\gamma$ 可取为任意实数, 如果 $\gamma$ 为负数, 则 $\Phi$为 Lipschitz函数.
+
+\noindent\kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao} \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao M. Abbaszadeh, H. J. Marquez, Nonlinear observer design for one-sided lipschitz systems, in: American Control Conference, 2010, pp. 5284–5289.}
+\end{rem}
+
+\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+ \begin{assp}
+假设干扰 $w(t)\in\mathcal{W}\subset \mathcal{L}_2[0,T]$ 且集合的上确界 $\mathcal{W}$ 为 $d$, $d$ 为一正常数, 即:
+ 	\begin{align}
+     \forall w(t)\in \mathcal{W},\quad \int^T_0w^T(t)w(t)dt\leq d
+ 	\end{align}
+ \end{assp}
+\end{frame}
+
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+对于目标系统，考虑如下经典形式的函数观测器:
+
+\begin{align}\left\{\begin{aligned}
+\dot{\xi}(t)&=N\xi(t)+H\xi(t-\tau)+My(t)+T\Phi(F_L^{\dagger}\hat{x},u)\\
+\hat{x}(t)&=G\xi(t)+Fy(t)\end{aligned}\right.
+\end{align}
+
+其中 $\xi\in\mathcal {R}^r$ 是观测器状态, $\hat{x}\in\mathcal{R}^r$ 为量测状态, 假设存在行满秩矩阵$F_L\in\mathcal{R}^{r\times n}$， 其中$F_L^{\dagger}$ 为 $F_L$ 的 Moore-Penrose 广义逆. $T\in\mathcal {R}^{r\times n}$, $N$, $H$, $G\in\mathcal {R}^{r\times r}$, $M$, $F\in\mathcal {R}^{r\times p}$ 为观测器的待测矩阵.\par
+%设 $x(t)$ 和$\xi(t)$ 的误差为
+\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+\begin{align}
+\varepsilon(t)=\xi(t)-Tx(t)
+\end{align}
+于是我们得到如下 $\varepsilon(t)$ 的误差系统:
+\begin{align}
+\dot{\varepsilon}(t)&=N\varepsilon(t)+H\varepsilon(t-\tau)\notag\\
+&+(NT+MC-TA)x(t)+(HT-TB)x(t-\tau)\notag\\
+&+T\Delta\Phi+Dw(t)
+\end{align}
+其中
+\begin{align}
+\Delta\Phi&=\Phi(F_L^{\dag}\hat{x},u)-\Phi(x,u)\\
+D&=MD_2-TD_1
+\end{align}
+且得到量测状态
+\begin{align}
+\hat{x}(t)=G\varepsilon(t)+(GT+FC)x(t)+FD_2w(t)
+\end{align}
+\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+
+如果矩阵 $T$ 取为满足
+\begin{align}
+NT+MC&=TA\\
+HT&=TB\\
+GT+FC&=F_L
+\end{align}
+的矩阵，则 Eqs.(18) 和 (21) 变为
+\begin{align}\left\{\begin{aligned}
+\dot{\varepsilon}(t)&=N\varepsilon(t)+H\varepsilon(t-\tau)+T\Delta\Phi+Dw(t)\\
+e(t)&=G\varepsilon(t)+FD_2w(t)\end{aligned}\right.
+\end{align}
+\end{frame}
+
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+其中 $e(t)$ 为误差，且定义为$e(t)=\hat{x}(t)-F_Lx(t)$.
+在这部分的技术路线上，我们研究设计满足二次内部有界的一类非线性系统的有限时间$\mathcal{H}_{\infty}$ 有界函数观测器设计，基于 Amato 的FTB理论.\par
+然而，不仅在理论分析上存在一定难度，对于非线性函数的求解转化，还有比如涉及到未知矩阵的特征值处理，误差的时滞项怎么解决，误差的最大界限如何控制，都是需要攻克的问题.\par
+特别地，函数观测器的待定矩阵的可解性唯一性条件也需要严谨地理论推导和给出判据条件.
+
+\end{frame}
+\begin{frame}\frametitle{(3) $\mathcal{H}_{\infty}$ finite-time bounded functional observer design}
+\textbf{Main Problem:}\par
+  本部分所要研究的满足二次内部有界条件的一类非线性时滞系统的有限时间$\mathcal {H}_{\infty}$有界函数观测器设计，基于FTB和广义逆理论，是可解的，需满足以下条件:
+  	\begin{enumerate}[(1)]
+        \item  函数观测器的待定矩阵满足可解性条件.
+  		\item 误差系统为 FTB.
+  		\item  在零初态下 $\phi (t)=0,\ \forall t\in[-\tau, 0]$, 误差 $e(t)$ 满足如下干扰有界条件
+  		\begin{align}
+  			\int^t_0e^T(s)e(s)\,\mathrm{d}s \leq\gamma^2\int_{0}^{t}\omega^T(s)\omega(s)\,\mathrm{d}s
+  		\end{align}
+对于所有非零 $\omega(t)\in \mathcal{W}$, 干扰抑制参数 $\gamma>0$.
+  	\end{enumerate}
+
+\end{frame}
+
+
+
+\subsection{High-gain observer design for Holder nonlinearity}
+
+%\begin{frame}\frametitle{(4) High-gain observer design for Holder nonlinearity}
+%\begin{block}{Theorem 2.3 (Borodin, 1993)}
+%\medskip
+%If $G$ is a plane graph with  $\Delta\geq12$, then $\chi_{vef}(G)\leq\Delta+2$.
+%\end{block}
+%\medskip
+%\noindent \kaishu\textcolor[rgb]{0.85,0.42,0.00}{\liuhao O.V.Borodin, Mat Zametki 53(1993), 35-47(in Russian).}
+%\end{frame}
+
+\begin{frame}\frametitle{(4) High-gain observer design for Holder nonlinearity}
+We will considers the problem of high-gain observer design for a class of nonlinear systems in the following form:
+\begin{align}
+%\left\{
+%\begin{aligned}
+	\dot{x}_1 &= x_2+\phi_1(t,x_1,u)\notag\\
+	\dot{x}_2 &= x_3+\phi_2(t,X_2,u)\notag\\\
+              &\vdots\notag\\\
+	\dot{x}_n &= u+\phi_n(t,x,u)\notag\\\
+            y &= \theta(t)x_1
+%\end{aligned}\right.
+\end{align}
+where $x=[x_1,\cdots,x_n]^T\in\mathcal {R}^n$,$u\in\mathcal {R}$ and $y\in\mathcal {R}$ stand for the system state, control input and measurement output, respectively. Note that $X_i=[x_1,\cdots,x_i]^T\in\mathcal {R}^i$. For $i=1,\cdots,n$, the nonlinearity $\phi_i:\mathcal {R}^+\times\mathcal {R}^i\times\mathcal {R}\rightarrow\mathcal {R}$ is a continuous function. The sensor sensitivity $\theta(t)$ is a bounded unknown continuous function of $t\in\mathcal {R}^+$.
+\end{frame}
+
+\begin{frame}\frametitle{(4) High-gain observer design for Holder nonlinearity}
+
+In this paper, we want to build observers for the more general triangular canonical form where non-Lipschitz triangular nonlinearities can appear on any line. As far as we know, this form has not received much attention apart from its well-known Lipschitz version and the convergence results holding for the phase-variable form do not extend trivially. We show here that the classical high gain observer may still be used when the nonlinearities verify some Holder-type condition
+\end{frame}
+
+\begin{frame}\frametitle{(4) High-gain observer design for Holder nonlinearity}
+For a positive real number $\mathrm{a}$ and a vector $\alpha$ in $[0,1]^{\frac{n(n+1)}{2}}$, we will say that the function $\Phi=[\phi_1,\cdots,\phi_n]^T$ verifies the assumption $\mathcal {P}(\alpha,\mathrm{a})$ if:
+\begin{assp}[$\mathcal {P}(\alpha,\mathrm{a})$ Holder nonlinearity]
+For all $i\in{1,\cdots, n}$, for all $X_{ia}$ and $X_{ib}\in \mathcal {R}^i$, $u\in\mathcal {U}$ and $t\in\mathcal {R}^+$, we have:
+\begin{align}
+|\phi_i(t,X_{ia},u)-\phi_i(t,X_{ib},u)|\leq\mathrm{a}\sum_{j=1}^i|X_{ja}-X_{jb}|^{\alpha_{ij}}
+\end{align}
+\end{assp}
+\begin{rem}
+This property captures many possible contexts. In the case in which $\alpha_{ij}>0$, it implies that the function $\Phi$ is holder with power $\alpha_{ij}$. When the $\alpha_{ij}=0$, it simply implies that the function $\Phi$ is bounded.
+\end{rem}
+
+\end{frame}
+\section{总结}
+\subsection{创新性}
+\begin{frame}\frametitle{创新性}
+\textbf{创新性:}\par
+本课题基于有限时间有界概念，针对三类不同的时滞非线性系统，分别设计状态反馈控制器，龙伯格观测器和函数观测器，创新性体现在：
+\begin{enumerate}
+\item 在控制器设计方面，由于引入新的参数，优化了现有研究在控制增益上的选取，得到的控制增益效果更好。
+\item 基于FTB理论，提出了一类在实际工程上应用性更强的FTB观测器，即：在指定时间区间内完成特定观测目的。
+\item 针对提出的两类FTB观测器，设计可解性条件
+\end{enumerate}
+\end{frame}
+\subsection{小结}
+\begin{frame}\frametitle{ 小结}
+\textbf{小结:}\par
+本课题基于有限时间有界概念，针对三类不同的时滞非线性系统，分别设计状态反馈控制器，龙伯格观测器和函数观测器，其中对于FTB观测器的设计部分，在本人调研后发现是尚未存在的，然而这种FTB观测器有很强的应用性。传统的观测器一般为$t\rightarrow\infty$的渐进观测器，具体观测时间无法捕捉。
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             77
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{background canvas}[vertical shading][bottom=white,top=structure.fg!25] %%%背景颜色调节
+\begin{frame}
+\begin{center}
+\kaishu\textcolor[rgb]{1.00,0.00,0.00}{\yihao Thanks for listening! Question time!}
+\end{center}
+\end{frame}
+
+
+\end{document}
